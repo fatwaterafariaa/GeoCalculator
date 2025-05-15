@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Geometri Fun!</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f0f9ff;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.2);
+        }
+        
+        h1 {
+            color: #ff6b6b;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #4d96ff;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+        
+        .shape-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .shape-card {
+            width: 120px;
+            height: 120px;
+            background-color: #ffd166;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .shape-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .shape-card.active {
+            background-color: #06d6a0;
+            color: white;
+        }
+        
+        .shape-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .shape-name {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .calculator {
+            background-color: #e8f4fc;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4d96ff;
+            font-weight: bold;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #a5d8ff;
+            border-radius: 10px;
+            font-size: 16px;
+            background-color: white;
+        }
+        
+        button {
+            background-color: #4d96ff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        button:hover {
+            background-color: #3a7bd5;
+            transform: translateY(-2px);
+        }
+        
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #d4edda;
+            border-radius: 10px;
+            color: #155724;
+            display: none;
+        }
+        
+        .result-item {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .shape-image {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .shape-image img {
+            max-width: 200px;
+            height: auto;
+        }
+        
+        .unit-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .unit-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .unit-option.active {
+            background-color: #4d96ff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kalkulator Geometri Fun!</h1>
+        <p class="subtitle">Temukan luas dan keliling dengan mudah dan menyenangkan!</p>
+        
+        <div class="unit-selector">
+            <div class="unit-option active" data-unit="cm">Centimeter (cm)</div>
+            <div class="unit-option" data-unit="m">Meter (m)</div>
+            <div class="unit-option" data-unit="mm">Milimeter (mm)</div>
+        </div>
+        
+        <div class="shape-cards">
+            <div class="shape-card active" data-shape="square">
+                <div class="shape-icon">□</div>
+                <div class="shape-name">Persegi</div>
+            </div>
+            <div class="shape-card" data-shape="rectangle">
+                <div class="shape-icon">▭</div>
+                <div class="shape-name">Persegi Panjang</div>
+            </div>
+            <div class="shape-card" data-shape="triangle">
+                <div class="shape-icon">△</div>
+                <div class="shape-name">Segitiga</div>
+            </div>
+            <div class="shape-card" data-shape="circle">
+                <div class="shape-icon">○</div>
+                <div class="shape-name">Lingkaran</div>
+            </div>
+            <div class="shape-card" data-shape="trapezoid">
+                <div class="shape-icon">⏢</div>
+                <div class="shape-name">Trapesium</div>
+            </div>
+        </div>
+        
+        <div class="calculator">
+            <div class="shape-image">
+                <img id="shape-img" src="https://via.placeholder.com/200x150?text=Persegi" alt="Bentuk Geometri">
+            </div>
+            
+            <div id="square-inputs">
+                <div class="input-group">
+                    <label for="square-side">Panjang Sisi</label>
+                    <input type="number" id="square-side" placeholder="Masukkan panjang sisi">
+                </div>
+            </div>
+            
+            <div id="rectangle-inputs" style="display:none;">
+                <div class="input-group">
+                    <label for="rectangle-length">Panjang</label>
+                    <input type="number" id="rectangle-length" placeholder="Masukkan panjang">
+                </div>
+                <div class="input-group">
+                    <label for="rectangle-width">Lebar</label>
+                    <input type="number" id="rectangle-width" placeholder="Masukkan lebar">
+                </div>
+            </div>
+            
+            <div id="triangle-inputs" style="display:none;">
+                <div class="input-group">
+                    <label for="triangle-base">Alas</label>
+                    <input type="number" id="triangle-base" placeholder="Masukkan alas">
+                </div>
+                <div class="input-group">
+                    <label for="triangle-height">Tinggi</label>
+                    <input type="number" id="triangle-height" placeholder="Masukkan tinggi">
+                </div>
+                <div class="input-group">
+                    <label for="triangle-side1">Sisi 1</label>
+                    <input type="number" id="triangle-side1" placeholder="Masukkan sisi 1">
+                </div>
+                <div class="input-group">
+                    <label for="triangle-side2">Sisi 2</label>
+                    <input type="number" id="triangle-side2" placeholder="Masukkan sisi 2">
+                </div>
+            </div>
+            
+            <div id="circle-inputs" style="display:none;">
+                <div class="input-group">
+                    <label for="circle-radius">Jari-jari</label>
+                    <input type="number" id="circle-radius" placeholder="Masukkan jari-jari">
+                </div>
+            </div>
+            
+            <div id="trapezoid-inputs" style="display:none;">
+                <div class="input-group">
+                    <label for="trapezoid-base1">Alas 1</label>
+                    <input type="number" id="trapezoid-base1" placeholder="Masukkan alas 1">
+                </div>
+                <div class="input-group">
+                    <label for="trapezoid-base2">Alas 2</label>
+                    <input type="number" id="trapezoid-base2" placeholder="Masukkan alas 2">
+                </div>
+                <div class="input-group">
+                    <label for="trapezoid-height">Tinggi</label>
+                    <input type="number" id="trapezoid-height" placeholder="Masukkan tinggi">
+                </div>
+                <div class="input-group">
+                    <label for="trapezoid-side1">Sisi 1</label>
+                    <input type="number" id="trapezoid-side1" placeholder="Masukkan sisi 1">
+                </div>
+                <div class="input-group">
+                    <label for="trapezoid-side2">Sisi 2</label>
+                    <input type="number" id="trapezoid-side2" placeholder="Masukkan sisi 2">
+                </div>
+            </div>
+            
+            <button id="calculate-btn">Hitung Sekarang!</button>
+            
+            <div class="results" id="results">
+                <div class="result-item" id="area-result">Luas: -</div>
+                <div class="result-item" id="perimeter-result">Keliling: -</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variabel global untuk unit
+        let currentUnit = 'cm';
+        
+        // Pilih bentuk
+        document.querySelectorAll('.shape-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.shape-card').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                
+                const shape = this.getAttribute('data-shape');
+                showShapeInputs(shape);
+                updateShapeImage(shape);
+            });
+        });
+        
+        // Pilih unit
+        document.querySelectorAll('.unit-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.unit-option').forEach(o => o.classList.remove('active'));
+                this.classList.add('active');
+                currentUnit = this.getAttribute('data-unit');
+            });
+        });
+        
+        // Tampilkan input yang sesuai dengan bentuk yang dipilih
+        function showShapeInputs(shape) {
+            document.getElementById('square-inputs').style.display = 'none';
+            document.getElementById('rectangle-inputs').style.display = 'none';
+            document.getElementById('triangle-inputs').style.display = 'none';
+            document.getElementById('circle-inputs').style.display = 'none';
+            document.getElementById('trapezoid-inputs').style.display = 'none';
+            
+            document.getElementById(`${shape}-inputs`).style.display = 'block';
+        }
+        
+        // Update gambar bentuk
+        function updateShapeImage(shape) {
+            const images = {
+                'square': 'https://cdn.pixabay.com/photo/2017/01/31/15/33/geometry-2025350_640.png',
+                'rectangle': 'https://cdn.pixabay.com/photo/2017/01/31/15/33/geometry-2025351_640.png',
+                'triangle': 'https://cdn.pixabay.com/photo/2017/01/31/15/33/geometry-2025354_640.png',
+                'circle': 'https://cdn.pixabay.com/photo/2017/01/31/15/33/geometry-2025349_640.png',
+                'trapezoid': 'https://cdn.pixabay.com/photo/2017/01/31/15/33/geometry-2025355_640.png'
+            };
+            
+            document.getElementById('shape-img').src = images[shape];
+            document.getElementById('shape-img').alt = shape.charAt(0).toUpperCase() + shape.slice(1);
+        }
+        
+        // Hitung luas dan keliling
+        document.getElementById('calculate-btn').addEventListener('click', function() {
+            const activeShape = document.querySelector('.shape-card.active').getAttribute('data-shape');
+            let area, perimeter;
+            
+            switch(activeShape) {
+                case 'square':
+                    const side = parseFloat(document.getElementById('square-side').value);
+                    area = side * side;
+                    perimeter = 4 * side;
+                    break;
+                    
+                case 'rectangle':
+                    const length = parseFloat(document.getElementById('rectangle-length').value);
+                    const width = parseFloat(document.getElementById('rectangle-width').value);
+                    area = length * width;
+                    perimeter = 2 * (length + width);
+                    break;
+                    
+                case 'triangle':
+                    const base = parseFloat(document.getElementById('triangle-base').value);
+                    const height = parseFloat(document.getElementById('triangle-height').value);
+                    const side1 = parseFloat(document.getElementById('triangle-side1').value);
+                    const side2 = parseFloat(document.getElementById('triangle-side2').value);
+                    area = 0.5 * base * height;
+                    perimeter = base + side1 + side2;
+                    break;
+                    
+                case 'circle':
+                    const radius = parseFloat(document.getElementById('circle-radius').value);
+                    area = Math.PI * radius * radius;
+                    perimeter = 2 * Math.PI * radius;
+                    break;
+                    
+                case 'trapezoid':
+                    const base1 = parseFloat(document.getElementById('trapezoid-base1').value);
+                    const base2 = parseFloat(document.getElementById('trapezoid-base2').value);
+                    const trapezoidHeight = parseFloat(document.getElementById('trapezoid-height').value);
+                    const trapezoidSide1 = parseFloat(document.getElementById('trapezoid-side1').value);
+                    const trapezoidSide2 = parseFloat(document.getElementById('trapezoid-side2').value);
+                    area = 0.5 * (base1 + base2) * trapezoidHeight;
+                    perimeter = base1 + base2 + trapezoidSide1 + trapezoidSide2;
+                    break;
+            }
+            
+            // Tampilkan hasil
+            document.getElementById('area-result').textContent = `Luas: ${area.toFixed(2)} ${currentUnit}²`;
+            document.getElementById('perimeter-result').textContent = `Keliling: ${perimeter.toFixed(2)} ${currentUnit}`;
+            document.getElementById('results').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
